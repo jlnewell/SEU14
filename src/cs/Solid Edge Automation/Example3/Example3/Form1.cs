@@ -111,8 +111,12 @@ namespace Example3
             // Check to see if we were passed a valid application instance.
             if (application == null)
             {
-                // Start a new instance.
-                application = new SolidEdgeFramework.Application();
+                // On a system where Solid Edge is installed, the COM ProgID will be
+                // defined in registry: HKEY_CLASSES_ROOT\SolidEdge.Application
+                Type t = Type.GetTypeFromProgID(SolidEdge.PROGID.Application, throwOnError: true);
+
+                // Using the discovered Type, create and return a new instance of Solid Edge.
+                application = (SolidEdgeFramework.Application)Activator.CreateInstance(type: t);
             }
 
             // Make sure Solid Edge is visible.

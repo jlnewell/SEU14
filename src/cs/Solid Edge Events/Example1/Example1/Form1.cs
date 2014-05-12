@@ -47,7 +47,14 @@ namespace Example1
                 {
                     if (_application == null)
                     {
-                        _application = new SolidEdgeFramework.Application();
+                        // On a system where Solid Edge is installed, the COM ProgID will be
+                        // defined in registry: HKEY_CLASSES_ROOT\SolidEdge.Application
+                        Type t = Type.GetTypeFromProgID(SolidEdge.PROGID.Application, throwOnError: true);
+
+                        // Using the discovered Type, create and return a new instance of Solid Edge.
+                        _application = (SolidEdgeFramework.Application)Activator.CreateInstance(type: t);
+
+                        // Show Solid Edge.
                         _application.Visible = true;
                     }
 

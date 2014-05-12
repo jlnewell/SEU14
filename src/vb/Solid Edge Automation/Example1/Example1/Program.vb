@@ -14,16 +14,18 @@ Namespace Example1
 			' Note that we're using SolidEdgeContrib.OleMessageFilter.
 			OleMessageFilter.Register()
 
-			' How long have you wished you could do this! Say thank you to SolidEdgeContrib.
-            Dim application As SolidEdgeFramework.Application
+			' On a system where Solid Edge is installed, the COM ProgID will be
+			' defined in registry: HKEY_CLASSES_ROOT\SolidEdge.Application
+			Dim t As Type = Type.GetTypeFromProgID(SolidEdge.PROGID.Application, throwOnError:= True)
 
-            application = New SolidEdgeFramework.Application()
-
-			' Get a reference to the Documents collection.
-            Dim documents = application.Documents
+			' Using the discovered Type, create and return a new instance of Solid Edge.
+			Dim application = DirectCast(Activator.CreateInstance(type:= t), SolidEdgeFramework.Application)
 
 			' Show Solid Edge.
 			application.Visible = True
+
+			' Get a reference to the Documents collection.
+			Dim documents = application.Documents
 
 			' Demonstrate SolidEdgeContrib provided method extensions.
 			DemoApplicationExtensionMethods(application, documents)

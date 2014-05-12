@@ -86,8 +86,12 @@ Namespace Example3
 
 			' Check to see if we were passed a valid application instance.
 			If application Is Nothing Then
-				' Start a new instance.
-				application = New SolidEdgeFramework.Application()
+				' On a system where Solid Edge is installed, the COM ProgID will be
+				' defined in registry: HKEY_CLASSES_ROOT\SolidEdge.Application
+				Dim t As Type = Type.GetTypeFromProgID(SolidEdge.PROGID.Application, throwOnError:= True)
+
+				' Using the discovered Type, create and return a new instance of Solid Edge.
+				application = DirectCast(Activator.CreateInstance(type:= t), SolidEdgeFramework.Application)
 			End If
 
 			' Make sure Solid Edge is visible.

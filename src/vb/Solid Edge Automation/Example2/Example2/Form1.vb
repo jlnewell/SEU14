@@ -31,8 +31,12 @@ Namespace Example2
 					' Attempt to connect to a running instace.
 					_application = DirectCast(Marshal.GetActiveObject(SolidEdge.PROGID.Application), SolidEdgeFramework.Application)
 				Catch
-					' Start a new instance.
-                    _application = New SolidEdgeFramework.Application()
+					' On a system where Solid Edge is installed, the COM ProgID will be
+					' defined in registry: HKEY_CLASSES_ROOT\SolidEdge.Application
+					Dim t As Type = Type.GetTypeFromProgID(SolidEdge.PROGID.Application, throwOnError:= True)
+
+					' Using the discovered Type, create and return a new instance of Solid Edge.
+					_application = DirectCast(Activator.CreateInstance(type:= t), SolidEdgeFramework.Application)
 				End Try
 			End If
 
